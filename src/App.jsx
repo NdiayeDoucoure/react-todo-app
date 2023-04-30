@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { json } from "react-router-dom";
 import "./App.css";
 export default function App() {
   const [newItem, setNewItem] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const data = localStorage.getItem("ITEMS");
+    if (data === null) return [];
+
+    return JSON.parse(data);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ITEMS", JSON.stringify(todos));
+  }, [todos]);
 
   function handleSubmit(e) {
     e.preventDefault();
